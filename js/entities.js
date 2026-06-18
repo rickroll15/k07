@@ -212,13 +212,19 @@ window.EntityManager = (function() {
         const blockSize = 18;
         const gap = 4;
         const blockCount = 6;
+        const blockColumns = 3;
+        const blockRows = 2;
+        const width = blockColumns * blockSize + (blockColumns - 1) * gap;
+        const height = blockRows * blockSize + (blockRows - 1) * gap;
         collections.endingPoint = {
-            x: Config.WORLD_WIDTH - 250,
-            y: 180,
+            x: Config.WORLD_WIDTH / 2 - width / 2,
+            y: Config.WORLD_HEIGHT / 2 - height / 2,
             size: blockSize,
             blockSize,
             blockGap: gap,
             blockCount,
+            blockColumns,
+            blockRows,
             blinkTimer: 0,
             isNearby: false,
             color: '#00ff66'
@@ -236,10 +242,13 @@ window.EntityManager = (function() {
     function getEndingCenter(point) {
         const blockSize = point.blockSize || point.size || 0;
         const blockCount = point.blockCount || 1;
+        const blockColumns = point.blockColumns || 1;
+        const blockRows = point.blockRows || Math.ceil(blockCount / blockColumns);
         const blockGap = point.blockGap || 0;
-        const height = blockCount * blockSize + (blockCount - 1) * blockGap;
+        const width = blockColumns * blockSize + (blockColumns - 1) * blockGap;
+        const height = blockRows * blockSize + (blockRows - 1) * blockGap;
         return {
-            x: point.x + blockSize / 2,
+            x: point.x + width / 2,
             y: point.y + height / 2
         };
     }

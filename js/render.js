@@ -90,21 +90,25 @@ window.RenderManager = (function() {
         const blockSize = point.blockSize || point.size;
         const gap = point.blockGap || 0;
         const blockCount = point.blockCount || 1;
+        const columns = point.blockColumns || 1;
         ctx.fillStyle = '#00ff66';
         ctx.save();
         ctx.shadowColor = '#00ff66';
         ctx.shadowBlur = 12 + alpha * 8;
         for (let i = 0; i < blockCount; i++) {
+            const col = i % columns;
+            const row = Math.floor(i / columns);
             ctx.fillRect(
-                point.x - cameraRef.x,
-                point.y + i * (blockSize + gap) - cameraRef.y,
+                point.x + col * (blockSize + gap) - cameraRef.x,
+                point.y + row * (blockSize + gap) - cameraRef.y,
                 blockSize,
                 blockSize
             );
         }
         ctx.restore();
         if (point.isNearby) {
-            drawQuestionMark(point.x + blockSize / 2, point.y - 12, '#00ff99');
+            const width = columns * blockSize + (columns - 1) * gap;
+            drawQuestionMark(point.x + width / 2, point.y - 12, '#00ff99');
         }
     }
 
@@ -130,8 +134,14 @@ window.RenderManager = (function() {
             : 0.35;
         const radius = Config.escape.auraRadius + (1 - pulseRatio) * 120;
         const alpha = state.escape.wavePulse > 0 ? 0.28 * pulseRatio : 0.14;
-        const x = point.x + point.size / 2 - cameraRef.x;
-        const y = point.y + ((point.blockCount || 1) * point.size + ((point.blockCount || 1) - 1) * (point.blockGap || 0)) / 2 - cameraRef.y;
+        const blockSize = point.blockSize || point.size;
+        const gap = point.blockGap || 0;
+        const columns = point.blockColumns || 1;
+        const rows = point.blockRows || Math.ceil((point.blockCount || 1) / columns);
+        const width = columns * blockSize + (columns - 1) * gap;
+        const height = rows * blockSize + (rows - 1) * gap;
+        const x = point.x + width / 2 - cameraRef.x;
+        const y = point.y + height / 2 - cameraRef.y;
 
         ctx.save();
         ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;

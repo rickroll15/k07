@@ -68,11 +68,11 @@ window.GameConfig = {
     escape: {
         crystalGoal: 30,
         chargeDurationFrames: 600,
-        waveIntervalFrames: 90,
+        waveIntervalFrames: 120,
         wavePulseFrames: 42,
-        waveMonsterCount: 2,
+        waveMonsterCount: 1,
         auraRadius: 150,
-        monsterSpeedMultiplier: 2
+        monsterSpeedMultiplier: 1.25
     },
 
     // ========== 区域配置 ==========

@@ -572,7 +572,7 @@ test('ending charge only advances inside the circle and resets to zero outside',
   assert.equal(Resource.gameState.escape.charge, 600);
 });
 
-test('escape monsters spawn from the four cardinal directions with boosted speed', () => {
+test('escape monsters spawn from the four cardinal directions with gentler ending pressure', () => {
   const { context, Entity } = createHarness();
   const player = Entity.collections.player;
   player.x = 800;
@@ -587,7 +587,7 @@ test('escape monsters spawn from the four cardinal directions with boosted speed
   let index = 0;
   const random = () => sequence[index++];
 
-  Entity.spawnMonsters(4, player, { mode: 'cardinal', random, speedMultiplier: 2 });
+  Entity.spawnMonsters(4, player, { mode: 'cardinal', random, speedMultiplier: 1.25 });
 
   const [left, right, up, down] = Entity.collections.monsters;
 
@@ -596,9 +596,12 @@ test('escape monsters spawn from the four cardinal directions with boosted speed
   assert.ok(up.y < player.y && Math.abs(up.x - player.x) < 50);
   assert.ok(down.y > player.y && Math.abs(down.x - player.x) < 50);
   assert.ok(left.speed > context.window.GameConfig.combat.monster.baseSpeed);
+  assert.equal(context.window.GameConfig.escape.waveMonsterCount, 1);
+  assert.equal(context.window.GameConfig.escape.waveIntervalFrames, 120);
+  assert.equal(context.window.GameConfig.escape.monsterSpeedMultiplier, 1.25);
 });
 
-test('ending ship renders as a vertical six-block signal with a larger aura', () => {
+test('ending ship appears at map center and renders as a two-row six-block signal', () => {
   const { context, Resource, Entity } = createHarness({
     includeGame: true,
     immediateTimers: true,
@@ -620,10 +623,19 @@ test('ending ship renders as a vertical six-block signal with a larger aura', ()
     call.h >= 10
   );
   const auraArc = ctx.calls.arcs.find(call => call.radius >= 100);
+  const point = Entity.collections.endingPoint;
+  const expectedWidth = point.blockColumns * point.blockSize + (point.blockColumns - 1) * point.blockGap;
+  const expectedHeight = point.blockRows * point.blockSize + (point.blockRows - 1) * point.blockGap;
+  const blockYs = [...new Set(shipBlocks.map(call => call.y))];
 
   assert.equal(shipBlocks.length, 6);
+  assert.equal(point.blockColumns, 3);
+  assert.equal(point.blockRows, 2);
+  assert.equal(point.x + expectedWidth / 2, context.window.GameConfig.WORLD_WIDTH / 2);
+  assert.equal(point.y + expectedHeight / 2, context.window.GameConfig.WORLD_HEIGHT / 2);
+  assert.equal(blockYs.length, 2);
   assert.ok(auraArc);
-  assert.ok(Entity.collections.endingPoint);
+  assert.ok(point);
 });
 
 test('nearby event points are marked for interaction without being consumed', () => {
@@ -656,9 +668,9 @@ test('ending point proximity uses the center of the full six-block signal', () =
   const player = Entity.collections.player;
   Entity.spawnEndingPoint();
   const point = Entity.collections.endingPoint;
-  const signalHeight = point.blockCount * point.blockSize + (point.blockCount - 1) * point.blockGap;
+  const signalHeight = point.blockRows * point.blockSize + (point.blockRows - 1) * point.blockGap;
 
-  player.x = point.x + point.blockSize / 2 - player.size / 2;
+  player.x = point.x + (point.blockColumns * point.blockSize + (point.blockColumns - 1) * point.blockGap) / 2 - player.size / 2;
   player.y = point.y + signalHeight / 2 + 140 - player.size / 2;
 
   assert.equal(Entity.isNearEndingPoint(player), true);
