@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>废土星K-07 探索</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 游戏主画布 -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- UI交互层 -->
+    <div class="ui-layer">
+        <!-- 左侧状态栏 -->
+        <div class="status-bar">
+            <div>生命值：<span id="hp">100</span> / 100</div>
+            <div>星能晶块：<span id="crystal">0</span></div>
+            <div>食物：<span id="food">5</span></div>
+            <div>子弹：<span id="ammo">60</span></div>
+            <div>晶核：<span id="core">0</span></div>
+            <div>探索进度：<span id="progress">0</span> / <span id="total">0</span></div>
+            <button class="debug-button" id="debug-grant-crystals" type="button">补足30晶块</button>
+        </div>
+
+        <div class="inventory-panel" id="inventory-panel">
+            <div class="inventory-title">背包</div>
+            <div class="inventory-list" id="inventory-list"></div>
+            <div class="inventory-tip">按 B 键关闭 · 点击消耗品可使用</div>
+        </div>
+
+        <!-- 顶部系统提示 -->
+        <div class="system-tip" id="system-tip"></div>
+
+        <!-- 底部剧情面板 -->
+        <div class="story-panel" id="story-panel">
+            <div class="story-text" id="story-text"></div>
+            <div class="continue-tip" id="continue-tip" style="display: none;"></div>
+            <div class="option-area" id="option-area" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- JS文件引入：严格按依赖顺序加载，不可调换顺序 -->
+   <!-- 按以下顺序引入 JS 文件 -->
+   <script src="js/events.js"></script>
+   <script src="js/config.js"></script>
+   <script src="js/input.js"></script>
+   <script src="js/entities.js"></script>
+   <script src="js/resource.js"></script>
+   <script src="js/render.js"></script>
+   <script src="js/story.js"></script>
+   <script src="js/game.js"></script>
+</body>
+</html>

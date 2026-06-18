@@ -1,0 +1,233 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: "Microsoft Yahei", sans-serif;
+    color: #fff;
+    user-select: none;
+}
+
+#game-canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    cursor: crosshair;
+}
+
+.ui-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.status-bar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 12px 18px;
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1.8;
+    pointer-events: auto;
+}
+
+.debug-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 6px 10px;
+    width: 100%;
+    border: 1px solid #666;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #fff;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.debug-button:hover {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.12);
+}
+
+.system-tip {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid #00d4ff;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.system-tip.show {
+    opacity: 1;
+}
+
+.story-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.85);
+    border-top: 1px solid #00d4ff;
+    padding: 24px 40px;
+    min-height: 200px;
+    pointer-events: auto;
+    display: none;
+}
+
+.story-text {
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+}
+
+.continue-tip {
+    color: #888;
+    font-size: 13px;
+    text-align: right;
+}
+
+.option-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.option-btn {
+    padding: 10px 16px;
+    border: 1px solid #555;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.option-btn.disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    border-color: #333;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.option-btn:hover {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.option-btn.disabled:hover {
+    border-color: #333;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.option-btn .key {
+    color: #00d4ff;
+    margin-right: 8px;
+}
+
+.system { color: #00d4ff; }
+.danger { color: #ff4444; }
+/* ===== 背包面板 ===== */
+.inventory-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(420px, calc(100vw - 32px));
+    max-height: calc(100vh - 48px);
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #00d4ff;
+    border-radius: 4px;
+    padding: 20px;
+    pointer-events: auto;
+    display: none;
+    overflow: hidden;
+    z-index: 100;
+}
+.inventory-title {
+    font-size: 18px;
+    color: #00d4ff;
+    margin-bottom: 16px;
+    text-align: center;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+.inventory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: min(420px, calc(100vh - 180px));
+    overflow-y: auto;
+    margin-bottom: 12px;
+}
+
+.inventory-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inventory-section-title {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: #7cbfd6;
+    text-transform: uppercase;
+    margin: 4px 0 2px;
+}
+.inventory-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 14px;
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid #333;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.inventory-item:hover {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.12);
+}
+.inventory-item .item-info {
+    flex: 1;
+}
+.inventory-item .item-name {
+    color: #fff;
+    font-size: 14px;
+}
+.inventory-item .item-desc {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+}
+.inventory-item .item-count {
+    color: #00d4ff;
+    font-size: 14px;
+    margin-left: 12px;
+}
+.inventory-tip {
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
